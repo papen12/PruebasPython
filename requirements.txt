@@ -1,0 +1,6 @@
+ pip install fastapi
+  pip install    uvicorn
+  pip install    pydantic
+   pip install   httpx
+  pip install    pytest
+  pip install    python-multipart

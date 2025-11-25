@@ -53,3 +53,36 @@ def create_producto_db(nombre: str, categoria_id: int) -> dict:
     db['productos'].append(new_producto)
     _save_db(db)
     return new_producto
+
+
+def edit_producto_db(producto_id: int, nombre: str = None, categoria_id: int = None) -> dict:
+    """
+    Edita un producto existente en la base de datos.
+    Permite editar nombre, categoría, o ambos.
+    
+    Args:
+        producto_id: ID del producto a editar
+        nombre: Nuevo nombre del producto (opcional)
+        categoria_id: Nueva categoría ID (opcional)
+    
+    Returns:
+        dict: Producto editado o mensaje de error
+    """
+    db = _load_db()
+    producto_encontrado = None
+    for producto in db['productos']:
+        if producto['id'] == producto_id:
+            producto_encontrado = producto
+            break
+    
+    if not producto_encontrado:
+        return {"error": "Producto no encontrado"}
+    if nombre is not None:
+        producto_encontrado['nombre'] = nombre
+    if categoria_id is not None:
+        if not any(categoria['id'] == categoria_id for categoria in db['categorias']):
+            return {"error": "Categoría no encontrada"}
+        producto_encontrado['categoria_id'] = categoria_id
+    _save_db(db)
+    
+    return producto_encontrado
